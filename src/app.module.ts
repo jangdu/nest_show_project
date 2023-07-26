@@ -5,10 +5,11 @@ import { LoggerMiddleware } from './commons/middlewares/logger.middleware';
 @Module({
   imports: [],
   controllers: [AppController],
+  providers: [],
 })
 export class AppModule implements NestModule {
   // LoggerMiddleware 추가
-  configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer): any {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

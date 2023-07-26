@@ -3,12 +3,12 @@ import { NextFunction, Request, Response, response } from 'express';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private logger = new Logger('HTTP');
+  private readonly logger = new Logger('HTTP');
 
   use(req: Request, res: Response, next: NextFunction): void {
     const { method, originalUrl } = req;
 
-    response.on('finish', () => {
+    res.on('finish', () => {
       const { statusCode } = res;
       const contentLength = res.get('content-length');
 
