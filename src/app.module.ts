@@ -6,9 +6,11 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ShowsModule } from './shows/shows.module';
 import { SeatsModule } from './seats/seats.module';
+import { ReservationModule } from './reservation/reservation.module';
+import { UserReservationModule } from './user-reservation/user-reservation.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UsersModule, ShowsModule, SeatsModule],
+  imports: [ConfigModule.forRoot(), UsersModule, ShowsModule, SeatsModule, ReservationModule, UserReservationModule],
   controllers: [AppController],
   providers: [AppService],
 })

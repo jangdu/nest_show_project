@@ -1,8 +1,12 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { UserRequestDto } from './dto/user.request.dto';
+import { UsersService } from './users.service';
 
-@Controller('users')
+@Controller('api')
 export class UsersController {
-  @Get()
+  constructor(private usersService: UsersService) {}
+
+  @Get('me')
   getUsers(@Req() req) {
     return req.user;
   }
@@ -11,7 +15,9 @@ export class UsersController {
   postUsers() {}
 
   @Post('signup')
-  signup() {}
+  signup(@Body() body: UserRequestDto) {
+    this.usersService.createUsers(body.email, body.isAdmin, body.password, body.confirm);
+  }
 
   @Post('signin')
   signin(@Req() req) {
