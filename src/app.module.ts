@@ -8,9 +8,19 @@ import { ShowsModule } from './shows/shows.module';
 import { SeatsModule } from './seats/seats.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { UserReservationModule } from './user-reservation/user-reservation.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from './configs/typeorm.config';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UsersModule, ShowsModule, SeatsModule, ReservationModule, UserReservationModule],
+  imports: [
+    TypeOrmModule.forRoot(typeORMConfig),
+    ConfigModule.forRoot(),
+    UsersModule,
+    ShowsModule,
+    SeatsModule,
+    ReservationModule,
+    UserReservationModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
