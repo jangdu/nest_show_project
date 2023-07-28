@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+// import { Injectable } from '@nestjs/common';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
+import { ReservationEntity } from 'src/entities/reservation.entity';
+import { SeatEntity } from 'src/entities/seat.entity';
+import { ShowEntity } from 'src/entities/show.entity';
+import { UserEntity } from 'src/entities/user.entity';
+dotenv.config();
 
-const entities = [];
+const entities = [UserEntity, ReservationEntity, SeatEntity, ShowEntity];
 export let typeORMConfig: TypeOrmModuleOptions;
 typeORMConfig = {
   type: 'mysql',
   host: process.env.DEV_DB_HOST,
-  port: parseInt(process.env.DEV_DB_PORT),
+  port: 3306,
   username: process.env.DEV_DB_USERNAME,
   password: process.env.DEV_DB_PASSWORD,
   database: process.env.DEV_DB_DATABASE,

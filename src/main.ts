@@ -26,7 +26,7 @@ async function bootstrap() {
 
   await app.listen(port);
   console.log(`listening on port ${port}`);
-  console.log(process.env.NODE_ENV);
+  console.log('****', process.env.NODE_ENV);
 
   // Hot Reload 활성화
   if (module.hot) {
