@@ -1,34 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { UserEntity } from 'src/entities/user.entity';
 
-export class SignupRequestDto {
-  @ApiProperty({
-    example: 'true',
-    description: 'admin 계정 유무',
-    required: true,
-  })
-  public isAdmin: boolean;
-
-  @ApiProperty({
-    example: '장두혁',
-    description: '계정 이름',
-    required: true,
-  })
-  public name: string;
-
-  @ApiProperty({
-    example: 'jjj@gmail.com',
-    description: '계정 이메일',
-    required: true,
-  })
-  public email: string;
-
-  @ApiProperty({
-    example: 'a12345',
-    description: '계정 비밀번호',
-    required: true,
-  })
-  public password: string;
-
+// picktype: entity에 있는거 가져오깃
+export class SignupRequestDto extends PickType(UserEntity, ['email', 'name', 'isAdmin', 'password']) {
   @ApiProperty({
     example: 'a12345',
     description: '계정 비밀번호 확인',
