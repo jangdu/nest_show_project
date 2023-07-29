@@ -22,8 +22,8 @@ export class SeatEntity extends BaseEntity {
   @Column({ type: 'int', name: 'seatNumber' })
   seatNumber: number;
 
-  @Column({ type: 'int', name: 'grade' })
-  grade: number;
+  @Column({ type: 'varchar', length: 10, name: 'grade' })
+  grade: string;
 
   @Column({ type: 'int', name: 'price' })
   price: number;

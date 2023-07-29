@@ -18,9 +18,9 @@ typeORMConfig = {
   database: process.env.DEV_DB_DATABASE,
   entities: entities,
   // 자동으로 엔티티로드할지
-  autoLoadEntities: true,
+  autoLoadEntities: false,
   // 앱 시작 시 스키마 자동 동기화
-  synchronize: true,
+  synchronize: false,
   // 로깅
   logging: true,
   // 앱 종료후에도 연결 유지
