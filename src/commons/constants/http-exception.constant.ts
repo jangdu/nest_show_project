@@ -4,6 +4,11 @@ export const CustomHttpException = {
     code: 'UNAUTHORIZATION_ACCOUNT',
     message: '아이디 혹은 패스워드를 확인해주세요.',
   },
+  BAD_REQUEST_PASSWORD: {
+    statusCode: 400,
+    code: 'BAD_REQUEST_PASSWORD',
+    message: '패스워드와 패스워드확인을 확인해주세요.',
+  },
   UNAUTHORIZED_EXCEPTION: {
     statusCode: 403,
     code: 'UNAUTHORIZED_EXCEPTION',

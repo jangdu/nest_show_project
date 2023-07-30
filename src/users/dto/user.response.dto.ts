@@ -1,4 +1,4 @@
-export class AcessTokenDto {
+export class AccessTokenDto {
   readonly accessToken: string;
 }
 

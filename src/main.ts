@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './commons/exceptions/httpException.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 // HMR 활성화
 declare const module: any;
@@ -19,6 +20,8 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const port = process.env.PORT || 3000;
+  // class validator 전역 적용
+  app.useGlobalPipes(new ValidationPipe());
   // httpExceptionfilter활성화 예외처리 전역 필터 설정
   app.useGlobalFilters(new HttpExceptionFilter());
   // cors 설정

@@ -4,6 +4,10 @@ import { UsersService } from './users.service';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from 'src/commons/dto/user.dto';
 import { User } from 'src/commons/decorators/user.decorator';
+import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
+import { CustomHttpSuccess } from 'src/commons/constants/http-success.constants';
+import { access } from 'fs';
+import { AccessTokenDto, SignupResponseDto } from './dto/user.response.dto';
 
 @ApiTags('users')
 @Controller('api')
@@ -28,8 +32,20 @@ export class UsersController {
   })
   @ApiOperation({ summary: '회원가입' })
   @Post('signup')
-  signup(@Body() body: SignupRequestDto) {
-    this.usersService.createUsers(body.email, body.isAdmin, body.password, body.confirm);
+  async signup(@Body() body: SignupRequestDto): Promise<SignupResponseDto> {
+    const accessToken: AccessTokenDto = await this.usersService.createUsers(
+      body.email,
+      body.name,
+      body.isAdmin,
+      body.password,
+      body.confirm,
+    );
+
+    return {
+      statusCode: 201,
+      message: CustomHttpSuccess['SIGNUP_SUCCESS'],
+      data: accessToken,
+    };
   }
 
   @ApiOkResponse({ description: '로그인 성공' })

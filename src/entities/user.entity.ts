@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { ReservationEntity } from './reservation.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 @Entity('user')
 @Unique(['email'])
@@ -18,6 +19,8 @@ export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
+  @IsEmail()
+  @IsNotEmpty()
   @ApiProperty({
     example: 'jjj@gmail.com',
     description: '계정 이메일',
@@ -26,6 +29,7 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 40, name: 'email' })
   email: string;
 
+  @IsString()
   @ApiProperty({
     example: 'a12345',
     description: '계정 비밀번호',
@@ -34,6 +38,7 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 100, name: 'password', select: false })
   password: string;
 
+  @IsString()
   @ApiProperty({
     example: '장두혁',
     description: '계정 이름',
@@ -42,6 +47,7 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 30, name: 'name' })
   name: string;
 
+  @IsNumber()
   @ApiProperty({
     example: '100000',
     description: '계정 보유 포인트',
@@ -50,6 +56,7 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'int', name: 'point' })
   point: number;
 
+  @IsBoolean()
   @ApiProperty({
     example: 'true',
     description: 'admin 계정 유무',

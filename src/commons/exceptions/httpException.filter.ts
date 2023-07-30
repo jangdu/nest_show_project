@@ -9,6 +9,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const err = exception.getResponse() as
       | { message: any; statusCode: number; code: string }
+      // class-validator err
       | { error: string; statusCode: 400; message: string[]; code: string }
       | { error: string; statusCode: 404; message: string[]; code: string };
 
