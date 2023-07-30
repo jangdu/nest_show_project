@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { SignupRequestDto } from './dto/user.request.dto';
 import { UsersService } from './users.service';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -8,6 +8,7 @@ import { CustomHttpException } from 'src/commons/constants/http-exception.consta
 import { CustomHttpSuccess } from 'src/commons/constants/http-success.constants';
 import { access } from 'fs';
 import { AccessTokenDto, SignupResponseDto } from './dto/user.response.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
 @Controller('api')
@@ -33,13 +34,7 @@ export class UsersController {
   @ApiOperation({ summary: '회원가입' })
   @Post('signup')
   async signup(@Body() body: SignupRequestDto): Promise<SignupResponseDto> {
-    const accessToken: AccessTokenDto = await this.usersService.createUsers(
-      body.email,
-      body.name,
-      body.isAdmin,
-      body.password,
-      body.confirm,
-    );
+    const accessToken: AccessTokenDto = await this.usersService.signup(body);
 
     return {
       statusCode: 201,
@@ -50,6 +45,7 @@ export class UsersController {
 
   @ApiOkResponse({ description: '로그인 성공' })
   @ApiOperation({ summary: '로그인' })
+  @UseGuards(AuthGuard('local'))
   @Post('signin')
   signin(@User() user) {
     return user;
