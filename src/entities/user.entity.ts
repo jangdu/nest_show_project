@@ -35,7 +35,7 @@ export class UserEntity extends BaseEntity {
     description: '계정 비밀번호',
     required: true,
   })
-  @Column({ type: 'varchar', length: 100, name: 'password', select: false })
+  @Column({ type: 'varchar', length: 100, name: 'password' })
   password: string;
 
   @IsString()

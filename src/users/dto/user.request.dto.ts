@@ -12,3 +12,5 @@ export class SignupRequestDto extends PickType(UserEntity, ['email', 'name', 'is
   })
   public confirm: string;
 }
+
+export class SigninRequestDto extends PickType(UserEntity, ['email', 'password']) {}

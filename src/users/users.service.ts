@@ -5,6 +5,7 @@ import { CustomHttpException } from 'src/commons/constants/http-exception.consta
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenDto } from './dto/user.response.dto';
 import { UsersRepository } from './users.repository';
+import { SigninRequestDto } from './dto/user.request.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +27,28 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     await this.usersRepository.createUser(email, name, isAdmin, hashedPassword, 100000);
+
+    const payload = { email };
+    const accessToken: string = await this.jwtService.sign(payload);
+
+    return { accessToken: accessToken };
+  }
+
+  async signin(body: SigninRequestDto): Promise<AccessTokenDto> {
+    const { email, password } = body;
+
+    const user = await this.usersRepository.findByEmail(email);
+
+    if (!user) {
+      throw new HttpException(CustomHttpException['UNAUTHORIZATION_ACCOUNT'], HttpStatus.BAD_REQUEST);
+    }
+
+    const isMatch = await bcrypt.compare(password, user['password']);
+    console.log(isMatch);
+
+    if (!isMatch) {
+      throw new HttpException(CustomHttpException['UNAUTHORIZATION_ACCOUNT'], HttpStatus.BAD_REQUEST);
+    }
 
     const payload = { email };
     const accessToken: string = await this.jwtService.sign(payload);

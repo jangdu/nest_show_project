@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { SignupRequestDto } from './dto/user.request.dto';
+import { Body, Controller, Get, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { SigninRequestDto, SignupRequestDto } from './dto/user.request.dto';
 import { UsersService } from './users.service';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from 'src/commons/dto/user.dto';
@@ -7,7 +7,7 @@ import { User } from 'src/commons/decorators/user.decorator';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
 import { CustomHttpSuccess } from 'src/commons/constants/http-success.constants';
 import { access } from 'fs';
-import { AccessTokenDto, SignupResponseDto } from './dto/user.response.dto';
+import { AccessTokenDto, SigninResponseDto, SignupResponseDto } from './dto/user.response.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
@@ -26,6 +26,7 @@ export class UsersController {
     return user;
   }
 
+  // 회원가입
   @ApiResponse({
     type: UserDto,
     status: 201,
@@ -43,12 +44,18 @@ export class UsersController {
     };
   }
 
+  // 로그인
   @ApiOkResponse({ description: '로그인 성공' })
   @ApiOperation({ summary: '로그인' })
-  @UseGuards(AuthGuard('local'))
   @Post('signin')
-  signin(@User() user) {
-    return user;
+  async signin(@Body() body: SigninRequestDto): Promise<SigninResponseDto> {
+    const accessToken = await this.usersService.signin(body);
+
+    return {
+      statusCode: 200,
+      message: CustomHttpSuccess['SIGNIN_SUCCESS'],
+      data: accessToken,
+    };
   }
 
   @ApiResponse({
