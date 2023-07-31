@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { ReservationEntity } from './reservation.entity';
 import { SeatEntity } from './seat.entity';
-import { IsDate, IsString } from 'class-validator';
+import { IsDate, IsDateString, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('show')
@@ -46,7 +46,7 @@ export class ShowEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 30, name: 'category' })
   category: string;
 
-  @IsDate()
+  @IsDateString()
   @ApiProperty({
     example: '2023-08-20 14:00:00',
     description: '공연 날짜 및 시간',

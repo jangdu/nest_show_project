@@ -15,6 +15,7 @@ import { UsersRepository } from './users.repository';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.JWT_SECRET_EXPIRES_IN },
     }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   providers: [JwtStrategy, UsersService, UsersRepository],
   controllers: [UsersController],

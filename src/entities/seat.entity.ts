@@ -8,7 +8,6 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { ShowEntity } from './show.entity';
@@ -39,7 +38,7 @@ export class SeatEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 10, name: 'grade' })
   grade: string;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty({
     example: '10000',
     description: '공연 가격',
@@ -48,13 +47,7 @@ export class SeatEntity extends BaseEntity {
   @Column({ type: 'int', name: 'price' })
   price: number;
 
-  @IsString()
-  @ApiProperty({
-    example: '1',
-    description: '공연장 id',
-    required: true,
-  })
-  @Column()
+  @Column('int', { primary: true, name: 'showId' })
   showId: number;
 
   @CreateDateColumn()
