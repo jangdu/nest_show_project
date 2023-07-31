@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateShowRequestDto } from './dto/shows.request.dto';
 import { CreateShowResponseDto } from './dto/shows.response.dto';
@@ -7,6 +7,7 @@ import { Token } from 'src/commons/decorators/token.decorator';
 import { UserEntity } from 'src/entities/user.entity';
 import { CustomHttpSuccess } from 'src/commons/constants/http-success.constants';
 import { ShowsService } from './shows.service';
+import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
 
 @ApiTags('shows')
 @Controller('api/shows')
@@ -42,7 +43,10 @@ export class ShowsController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   async createShow(@Token() user: UserEntity, @Body() body: CreateShowRequestDto): Promise<CreateShowResponseDto> {
-    console.log(user);
+    // !TODO: Guard로 변경
+    if (!user.isAdmin) {
+      throw new HttpException(CustomHttpException['UNAUTHORIZED_EXCEPTION'], HttpStatus.UNAUTHORIZED);
+    }
     const createdShow = await this.showsService.createShow(body);
 
     return {

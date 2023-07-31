@@ -2,7 +2,7 @@ import { SeatsRepository } from './../seats/seats.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateShowRequestDto } from './dto/shows.request.dto';
 import { ShowsRepository } from './shows.repository';
-import { DataSource} from 'typeorm';
+import { DataSource } from 'typeorm';
 import { ShowEntity } from 'src/entities/show.entity';
 import { SeatEntity } from 'src/entities/seat.entity';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
