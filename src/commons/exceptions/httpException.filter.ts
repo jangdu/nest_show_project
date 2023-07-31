@@ -23,6 +23,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       code: err;
     }
 
+    if (message === 'Unauthorized') message = '로그인이 필요한 API.';
+
     response.status(status).json({
       statusCode: status,
       code,

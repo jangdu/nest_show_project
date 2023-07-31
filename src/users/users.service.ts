@@ -3,7 +3,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenDto } from './dto/user.response.dto';
+import { AccessTokenDto, MyUserDto } from './dto/user.response.dto';
 import { UsersRepository } from './users.repository';
 import { SigninRequestDto } from './dto/user.request.dto';
 
@@ -54,5 +54,12 @@ export class UsersService {
     const accessToken: string = await this.jwtService.sign(payload);
 
     return { accessToken: accessToken };
+  }
+
+  async getMyInfo(user: MyUserDto): Promise<MyUserDto> {
+    const { id, email, name, isAdmin, point, createdAt } = user;
+    const myUser: MyUserDto = user;
+
+    return { id, email, name, isAdmin, point, createdAt };
   }
 }

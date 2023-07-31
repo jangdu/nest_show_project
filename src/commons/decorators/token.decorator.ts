@@ -1,9 +1,10 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
+import { UserEntity } from 'src/entities/user.entity';
 
 // @Token 커스텀
-export const User = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+export const Token = createParamDecorator((data, ctx: ExecutionContext): UserEntity => {
   // ctx : 실생 컨텍스트
-  const response = ctx.switchToHttp().getResponse();
-  return response.locals.jwt;
+  const request = ctx.switchToHttp().getRequest();
+  return request.user;
 });
 // @Token() token

@@ -1,13 +1,12 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { SigninRequestDto, SignupRequestDto } from './dto/user.request.dto';
 import { UsersService } from './users.service';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from 'src/commons/dto/user.dto';
-import { User } from 'src/commons/decorators/user.decorator';
-import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
 import { CustomHttpSuccess } from 'src/commons/constants/http-success.constants';
-import { access } from 'fs';
-import { AccessTokenDto, SigninResponseDto, SignupResponseDto } from './dto/user.response.dto';
+import { AccessTokenDto, MeResponseDto, SigninResponseDto, SignupResponseDto } from './dto/user.response.dto';
+import { Token } from 'src/commons/decorators/token.decorator';
+import { UserEntity } from 'src/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
@@ -15,15 +14,23 @@ import { AuthGuard } from '@nestjs/passport';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  // 내 정보 조회
   @ApiResponse({
     type: UserDto,
-    status: 201,
+    status: 200,
     description: '성공',
   })
   @ApiOperation({ summary: '내 정보 조회' })
+  @UseGuards(AuthGuard('jwt'))
   @Get('me')
-  getUsers(@User() user) {
-    return user;
+  async getMyInfo(@Token() user: UserEntity): Promise<MeResponseDto> {
+    const myUser = await this.usersService.getMyInfo(user);
+
+    return {
+      statusCode: 201,
+      message: CustomHttpSuccess['GET_MY_INFO_SUCCESS'],
+      data: myUser,
+    };
   }
 
   // 회원가입
