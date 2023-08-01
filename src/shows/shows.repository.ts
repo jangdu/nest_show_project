@@ -65,12 +65,13 @@ export class ShowsRepository {
       if (!show) {
         throw new HttpException(CustomHttpException['NOTFOUNDED_EXCEPTION'], HttpStatus.NOT_FOUND);
       }
-      console.log(show);
 
-      const availableSeatCount = show ? show.seat.length : 0;
+      //   const availableSeatCount = show ? show.seat : 0;
+      const availableSeatCount = show.seat.filter((item) => {
+        return item.reservation.length < 1;
+      }).length;
       // availableSeatCount;
 
-      console.log(show);
       return { show, availableSeatCount };
     } catch (error) {
       if (error.status === 404)
