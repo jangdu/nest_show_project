@@ -24,6 +24,11 @@ export const CustomHttpException = {
     code: 'CONFLICT_EMAIL',
     message: '이미 존재하는 이메일 입니다.',
   },
+  CONFLICT_SEAT: {
+    statusCode: 409,
+    code: 'CONFLICT_SEAT',
+    message: '이미 매진된 좌석입니다.',
+  },
   DB_SERVER_ERROR: {
     statusCode: 401,
     code: 'DB_SERVER_ERROR',
