@@ -25,4 +25,59 @@ export class ShowsRepository {
       throw new HttpException(CustomHttpException['DB_SERVER_ERROR'], HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findByKeyword(keyword: string | null) {
+    try {
+      const show = await this.showEntity
+        .createQueryBuilder('show')
+        .where('show.title LIKE :keyword OR show.category LIKE :keyword', {
+          // .where('show.title LIKE :keyword OR show.category LIKE :keyword', {
+          keyword: `%${keyword}%`,
+        })
+        .getMany();
+
+      return { show };
+    } catch (error) {
+      throw new HttpException(CustomHttpException['DB_SERVER_ERROR'], HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findById(id: number) {
+    try {
+      //   console.log(id);
+      const show = await this.showEntity
+        .createQueryBuilder('show')
+        .leftJoinAndSelect('show.seat', 'seat')
+        .leftJoinAndSelect('seat.reservation', 'reservation')
+        .select([
+          'show.id',
+          'show.title',
+          'show.category',
+          'show.date',
+          'seat.seatNumber',
+          'seat.grade',
+          'seat.price',
+          'reservation',
+        ])
+        .where('show.id = :id', { id })
+        .getOne();
+
+      if (!show) {
+        throw new HttpException(CustomHttpException['NOTFOUNDED_EXCEPTION'], HttpStatus.NOT_FOUND);
+      }
+      console.log(show);
+
+      const availableSeatCount = show ? show.seat.length : 0;
+      // availableSeatCount;
+
+      console.log(show);
+      return { show, availableSeatCount };
+    } catch (error) {
+      if (error.status === 404)
+        throw new HttpException(CustomHttpException['NOTFOUNDED_EXCEPTION'], HttpStatus.NOT_FOUND);
+
+      console.log(error);
+      throw new HttpException(CustomHttpException['DB_SERVER_ERROR'], HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

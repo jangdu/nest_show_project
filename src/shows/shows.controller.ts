@@ -25,13 +25,30 @@ export class ShowsController {
     description: '공연 검색 키워드',
   })
   @Get()
-  getShowByKeyword(@Query() query) {}
+  async getShowByKeyword(@Query() query) {
+    const { keyword } = query;
+    const shows = await this.showsService.findByKeyword(keyword ? keyword : '');
+
+    return {
+      statusCode: 201,
+      message: CustomHttpSuccess['GET_SHOW_BY_KEYWORD'],
+      data: shows,
+    };
+  }
 
   @ApiOperation({ summary: '공연 상세 조회' })
   @ApiParam({ name: 'showId', description: '공연 id', required: true })
   @Get(':showId')
-  getShowById(@Param() param) {
-    console.log(param.id);
+  async getShowById(@Param() param) {
+    const { showId } = param;
+
+    const shows = await this.showsService.findById(showId);
+
+    return {
+      statusCode: 201,
+      message: CustomHttpSuccess['GET_SHOW_BY_ID'],
+      data: shows,
+    };
   }
 
   @ApiResponse({

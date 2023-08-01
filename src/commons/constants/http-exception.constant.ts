@@ -14,6 +14,11 @@ export const CustomHttpException = {
     code: 'UNAUTHORIZED_EXCEPTION',
     message: '해당 API에 접근 권한이 없습니다.',
   },
+  NOTFOUNDED_EXCEPTION: {
+    statusCode: 404,
+    code: 'NOTFOUNDED_EXCEPTION',
+    message: '해당하는 데이터를 찾을 수 없습니다.',
+  },
   CONFLICT_EMAIL: {
     statusCode: 409,
     code: 'CONFLICT_EMAIL',

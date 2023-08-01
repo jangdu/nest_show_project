@@ -59,4 +59,12 @@ export class ShowsService {
       await queryRunner.release();
     }
   }
+
+  async findById(id: number) {
+    return this.showsRepository.findById(id);
+  }
+
+  async findByKeyword(keyowrd: string | null) {
+    return this.showsRepository.findByKeyword(keyowrd);
+  }
 }
