@@ -10,6 +10,10 @@ class SeatInfo extends PickType(SeatEntity, ['grade', 'price']) {
   numberOfSeat: number;
 }
 
+export class GetShowRequestDto {
+  keyword: string;
+}
+
 export class CreateShowRequestDto extends PickType(ShowEntity, ['title', 'location', 'category', 'date']) {
   @ValidateNested({ each: true })
   @Type(() => SeatInfo)

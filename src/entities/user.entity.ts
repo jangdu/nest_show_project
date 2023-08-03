@@ -16,6 +16,10 @@ import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-valida
 @Entity('user')
 @Unique(['email'])
 export class UserEntity extends BaseEntity {
+  @ApiProperty({
+    example: '2',
+    description: 'userId',
+  })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -65,6 +69,11 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'boolean', name: 'isAdmin' })
   isAdmin: boolean;
 
+  @ApiProperty({
+    example: '2023-07-29T14:52:33.263Z',
+    description: '계정 생성 날짜',
+    required: true,
+  })
   @CreateDateColumn()
   createdAt: Date;
 

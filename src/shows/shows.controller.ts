@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateShowRequestDto } from './dto/shows.request.dto';
-import { CreateShowResponseDto } from './dto/shows.response.dto';
+import { CreateShowRequestDto, GetShowRequestDto } from './dto/shows.request.dto';
+import { CreateShowResponseDto, GetShowByIdDto, GetShowsResponseDto } from './dto/shows.response.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Token } from 'src/commons/decorators/token.decorator';
 import { UserEntity } from 'src/entities/user.entity';
@@ -24,13 +24,18 @@ export class ShowsController {
     required: true,
     description: '공연 검색 키워드',
   })
+  @ApiResponse({
+    type: GetShowsResponseDto,
+    status: 200,
+    description: '공연 조회 성공',
+  })
   @Get()
-  async getShowByKeyword(@Query() query) {
+  async getShowByKeyword(@Query() query: GetShowRequestDto): Promise<GetShowsResponseDto> {
     const { keyword } = query;
     const shows = await this.showsService.findByKeyword(keyword ? keyword : '');
 
     return {
-      statusCode: 201,
+      statusCode: 200,
       message: CustomHttpSuccess['GET_SHOW_BY_KEYWORD'],
       data: shows,
     };
@@ -38,6 +43,11 @@ export class ShowsController {
 
   @ApiOperation({ summary: '공연 상세 조회' })
   @ApiParam({ name: 'showId', description: '공연 id', required: true })
+  @ApiResponse({
+    type: GetShowByIdDto,
+    status: 200,
+    description: CustomHttpSuccess['GET_SHOW_BY_ID'],
+  })
   @Get(':showId')
   async getShowById(@Param() param) {
     const { showId } = param;
@@ -52,7 +62,7 @@ export class ShowsController {
   }
 
   @ApiResponse({
-    type: CreateShowRequestDto,
+    type: CreateShowResponseDto,
     status: 201,
     description: '공연 생성 성공',
   })
@@ -69,7 +79,6 @@ export class ShowsController {
     return {
       statusCode: 201,
       message: CustomHttpSuccess['CREATE_SHOW'],
-      data: createdShow,
     };
   }
 }

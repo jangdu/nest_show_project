@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { ShowEntity } from 'src/entities/show.entity';
 import { SeatEntity } from 'src/entities/seat.entity';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
+import { promises } from 'dns';
 
 @Injectable()
 export class ShowsService {
@@ -64,7 +65,7 @@ export class ShowsService {
     return this.showsRepository.findById(id);
   }
 
-  async findByKeyword(keyowrd: string | null) {
+  async findByKeyword(keyowrd: string | null): Promise<any> {
     return this.showsRepository.findByKeyword(keyowrd);
   }
 }

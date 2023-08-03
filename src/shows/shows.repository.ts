@@ -26,7 +26,7 @@ export class ShowsRepository {
     }
   }
 
-  async findByKeyword(keyword: string | null) {
+  async findByKeyword(keyword: string | null): Promise<any> {
     try {
       const show = await this.showEntity
         .createQueryBuilder('show')

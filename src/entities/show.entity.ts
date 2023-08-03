@@ -17,6 +17,10 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity('show')
 export class ShowEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @ApiProperty({
+    example: '1',
+    description: '공연 id',
+  })
   id: number;
 
   @IsString()
