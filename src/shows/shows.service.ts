@@ -6,7 +6,6 @@ import { DataSource } from 'typeorm';
 import { ShowEntity } from 'src/entities/show.entity';
 import { SeatEntity } from 'src/entities/seat.entity';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
-import { promises } from 'dns';
 
 @Injectable()
 export class ShowsService {

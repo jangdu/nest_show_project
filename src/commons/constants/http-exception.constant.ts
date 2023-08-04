@@ -29,6 +29,11 @@ export const CustomHttpException = {
     code: 'CONFLICT_SEAT',
     message: '이미 매진된 좌석입니다.',
   },
+  NOT_ENOUGH_POINTS: {
+    statusCode: 402,
+    code: 'NOT_ENOUGH_POINTS',
+    message: '포인트가 부족하여 결제가 실패하였습니다.',
+  },
   DB_SERVER_ERROR: {
     statusCode: 401,
     code: 'DB_SERVER_ERROR',

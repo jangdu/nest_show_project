@@ -27,7 +27,7 @@ export class ReservationController {
   async createReservation(@Token() user: UserEntity, @Param('showId') showId: string, @Param('seatId') seatId: string) {
     console.log(user.id, showId, seatId);
 
-    const reservatedShow = await this.reservationService.createReservation(user.id, showId, seatId);
+    const reservatedShow = await this.reservationService.createReservation(user, showId, seatId);
 
     return {
       statusCode: 201,
