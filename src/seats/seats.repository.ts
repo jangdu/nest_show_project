@@ -31,7 +31,6 @@ export class SeatsRepository {
 
       return seat;
     } catch (error) {
-      console.log(error);
       throw new HttpException(CustomHttpException['DB_SERVER_ERROR'], HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

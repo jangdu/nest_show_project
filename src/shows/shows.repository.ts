@@ -44,7 +44,6 @@ export class ShowsRepository {
 
   async findById(id: number) {
     try {
-      //   console.log(id);
       const show = await this.showEntity
         .createQueryBuilder('show')
         .leftJoinAndSelect('show.seat', 'seat')
@@ -77,7 +76,6 @@ export class ShowsRepository {
       if (error.status === 404)
         throw new HttpException(CustomHttpException['NOTFOUNDED_EXCEPTION'], HttpStatus.NOT_FOUND);
 
-      console.log(error);
       throw new HttpException(CustomHttpException['DB_SERVER_ERROR'], HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
