@@ -3,15 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
 import { SeatEntity } from 'src/entities/seat.entity';
 import { CreateShowRequestDto } from 'src/shows/dto/shows.request.dto';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
-export class SeatsRepository {
-  constructor(@InjectRepository(SeatEntity) private seatEntity: Repository<SeatEntity>) {}
+export class SeatsRepository extends Repository<SeatEntity> {
+  constructor(private datasource: DataSource) {
+    super(SeatEntity, datasource.createEntityManager());
+  }
 
   async createSeats(seatNumber, grade, price, createdShowId): Promise<any> {
     try {
-      const createdSeat = await this.seatEntity.insert({
+      const createdSeat = await this.insert({
         showId: createdShowId,
         seatNumber,
         grade,
@@ -22,8 +24,7 @@ export class SeatsRepository {
 
   async getByShowIdAndSeatId(showId, seatId): Promise<any> {
     try {
-      const seat = await this.seatEntity
-        .createQueryBuilder('seat')
+      const seat = await this.createQueryBuilder('seat')
         .leftJoinAndSelect('seat.reservation', 'reservation')
         .select(['seat.id', 'seat.price', 'seat.grade', 'seat.seatNumber', 'reservation'])
         .where('seat.id = :seatId', { seatId })
