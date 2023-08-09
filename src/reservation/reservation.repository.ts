@@ -2,16 +2,17 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
 import { ReservationEntity } from 'src/entities/reservation.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
-export class ReservationRepository {
-  constructor(@InjectRepository(ReservationEntity) private reservationEntity: Repository<ReservationEntity>) {}
+export class ReservationRepository extends Repository<ReservationEntity> {
+  constructor(private datasource: DataSource) {
+    super(ReservationEntity, datasource.createEntityManager());
+  }
 
   async getMyReservations(userId) {
     try {
-      const myReservations = await this.reservationEntity
-        .createQueryBuilder('reservation')
+      const myReservations = await this.createQueryBuilder('reservation')
         .leftJoinAndSelect('reservation.show', 'show')
         .leftJoinAndSelect('reservation.seat', 'seat')
         .select([
@@ -39,8 +40,7 @@ export class ReservationRepository {
 
   async getMyReservationById(userId, reservationId) {
     try {
-      const myReservation = await this.reservationEntity
-        .createQueryBuilder('reservation')
+      const myReservation = await this.createQueryBuilder('reservation')
         .leftJoinAndSelect('reservation.show', 'show')
         .leftJoinAndSelect('reservation.seat', 'seat')
         .select([
@@ -65,7 +65,7 @@ export class ReservationRepository {
 
   async getByIsReservedSeat(showId, seatId) {
     try {
-      const isReservedSeat = await this.reservationEntity.find({ where: { showId, seatId } });
+      const isReservedSeat = await this.find({ where: { showId, seatId } });
       return isReservedSeat.length > 0 ? true : false;
     } catch (error) {
       throw new HttpException(CustomHttpException['DB_SERVER_ERROR'], HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,8 +74,7 @@ export class ReservationRepository {
 
   async createReservation(userId, showId, seatId) {
     try {
-      const createdReservation = await this.reservationEntity
-        .createQueryBuilder()
+      const createdReservation = await this.createQueryBuilder()
         .insert()
         .into(ReservationEntity)
         .values({ userId, showId, seatId })
