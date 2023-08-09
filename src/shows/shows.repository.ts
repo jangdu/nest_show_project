@@ -1,20 +1,22 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomHttpException } from 'src/commons/constants/http-exception.constant';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateShowRequestDto } from './dto/shows.request.dto';
 import { ShowEntity } from 'src/entities/show.entity';
 
 @Injectable()
-export class ShowsRepository {
-  constructor(@InjectRepository(ShowEntity) private showEntity: Repository<ShowEntity>) {}
+export class ShowsRepository extends Repository<ShowEntity> {
+  constructor(private datasource: DataSource) {
+    super(ShowEntity, datasource.createEntityManager());
+  }
 
   // 회원 등록
   async createShows(newShow: CreateShowRequestDto): Promise<number> {
     try {
       const { title, location, category, date } = newShow;
 
-      const createdShow = await this.showEntity.insert({
+      const createdShow = await this.insert({
         title,
         location,
         category,
@@ -28,8 +30,7 @@ export class ShowsRepository {
 
   async findByKeyword(keyword: string | null): Promise<any> {
     try {
-      const show = await this.showEntity
-        .createQueryBuilder('show')
+      const show = await this.createQueryBuilder('show')
         .where('show.title LIKE :keyword OR show.category LIKE :keyword', {
           // .where('show.title LIKE :keyword OR show.category LIKE :keyword', {
           keyword: `%${keyword}%`,
@@ -44,8 +45,7 @@ export class ShowsRepository {
 
   async findById(id: number) {
     try {
-      const show = await this.showEntity
-        .createQueryBuilder('show')
+      const show = await this.createQueryBuilder('show')
         .leftJoinAndSelect('show.seat', 'seat')
         .leftJoinAndSelect('seat.reservation', 'reservation')
         .select([
