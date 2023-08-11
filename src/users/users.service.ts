@@ -6,10 +6,15 @@ import { JwtService } from '@nestjs/jwt';
 import { AccessTokenDto, MyUserDto } from './dto/user.response.dto';
 import { UsersRepository } from './users.repository';
 import { SigninRequestDto } from './dto/user.request.dto';
+import { RedisService } from 'src/commons/redis/redis.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private usersRepository: UsersRepository, private jwtService: JwtService) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private jwtService: JwtService,
+    private readonly redisService: RedisService,
+  ) {}
 
   async signup(body): Promise<AccessTokenDto> {
     const { email, name, isAdmin, password, confirm } = body;
