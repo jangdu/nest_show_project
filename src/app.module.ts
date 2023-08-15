@@ -10,6 +10,7 @@ import { ReservationModule } from './reservation/reservation.module';
 import { UserReservationModule } from './user-reservation/user-reservation.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './configs/typeorm.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { typeORMConfig } from './configs/typeorm.config';
     SeatsModule,
     ReservationModule,
     UserReservationModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
